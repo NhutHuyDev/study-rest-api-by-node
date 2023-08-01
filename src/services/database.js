@@ -48,7 +48,8 @@ class DatabaseServices {
             resolve({
                 code: 201,
                 status: "success",
-                message: "insert successfull",
+                message: "insert successfully",
+                data: null
             })
         })
     }

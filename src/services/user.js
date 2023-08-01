@@ -21,13 +21,19 @@ class UserServices {
                 if (response) {
                     resolve({
                         code: 200,
+                        status: "success",
                         message: "successfully",
                         data: {
                             user: response
                         }
                     })
                 } else {
-                    throw new apiError("user is not found", 204, "UserException")
+                    resolve({
+                        code: 204,
+                        status: "success",
+                        message: "the user is not found",
+                        data: null
+                    })
                 }
             } catch (error) {
                 reject(error)

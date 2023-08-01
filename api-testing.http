@@ -1,3 +1,12 @@
+###
+POST http://localhost:5000/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "email": "nguyennhuthuy+24@gmail.com",
+    "password": "nhuthuy2002"
+}
+
 POST http://localhost:5000/api/v1/auth/register
 Content-Type: application/json
 
@@ -9,17 +18,12 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:5000/api/v1/auth/login
-Content-Type: application/json
-
-{
-    "email": "nguyennhuthuy+24@gmail.com",
-    "password": "nhuthuy2002"
-}
-
-###
 GET http://localhost:5000/api/v1/users/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJuZ3V5ZW5uaHV0aHV5KzI0QGdtYWlsLmNvbSIsImlhdCI6MTY5MDc3MjU3NSwiZXhwIjoxNjkxMjA0NTc1fQ.7Js-vPXgEPwDhTHqnpTmW1svT1GMX9onwPq8DoobZk8
 
 ### 
 GET http://localhost:5000/api/v1/database/
+
+###
+GET http://localhost:5000/api/v1/book/?available=1,2&page=100
+

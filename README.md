@@ -1,5 +1,6 @@
-## Giới thiệu
-* Học viết **REST Api** bằng Node
+### Giới thiệu
+Học viết **REST Api** bằng Node
+
 ### Work Flow
 * routes > nhận request từ browser
 * controllers > nơi tiếp nhận các request
