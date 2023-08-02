@@ -8,13 +8,13 @@ class AuthServices {
     constructor() {
     }
 
-    register({ role_code, name, avatar, email, password }) {
+    register({ roleCode, name, avatar, email, password }) {
         return new Promise(async (resolve, reject) => {
             try {
                 const [user, created] = await db.User.findOrCreate({
-                    where: { email },
+                    where: { email },   
                     defaults: {
-                        role_code: role_code || "R3",
+                        roleCode: roleCode || "R3",
                         name,
                         avatar: avatar || "src/assets/img/user-avatar.webp",
                         email,
@@ -31,7 +31,7 @@ class AuthServices {
                             authToken: "Bearer " + createToken({
                                 id: user.id,
                                 email: user.email,
-                                role_code: user.role_code
+                                roleCode: user.roleCode
                             }, process.env.JWT_SECRET_TOKEN)
                         }
                     })
@@ -61,7 +61,7 @@ class AuthServices {
                                 authToken: "Bearer " + createToken({
                                     id: user.id,
                                     email: user.email,
-                                    role_code: user.role_code
+                                    roleCode: user.roleCode
                                 }, process.env.JWT_SECRET_TOKEN)
                             }
                         })

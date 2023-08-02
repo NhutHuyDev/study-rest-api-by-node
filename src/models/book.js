@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         price: DataTypes.FLOAT,
         available: DataTypes.INTEGER,
         image: DataTypes.STRING,
+        imageFileName: DataTypes.STRING,
         description: DataTypes.TEXT
     }, {
         sequelize,
