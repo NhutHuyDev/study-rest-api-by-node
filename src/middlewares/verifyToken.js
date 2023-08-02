@@ -10,9 +10,16 @@ const verifyToken = asyncErrorHandler(async (req, res, next) => {
 
     const accessToken = authorizationToken.split(' ')[1]
 
-    jwt.verify(accessToken, process.env.JWT_SECRET_TOKEN, (err, decode) => {
-        if (err)
-            throw new apiError("access token may be expired or invalid", 401, "AuthenticationException")
+    jwt.verify(accessToken, process.env.JWT_SECRET_KEY_ACCESS_TOKEN, (err, decode) => {
+        if (err) {
+            const expiredToken = err instanceof jwt.TokenExpiredError
+
+            if (expiredToken) {
+                throw new apiError("access token is expired", 401, { expiredToken: true })
+            } else {
+                throw new apiError("access token is invalid", 401, { invalidToken: true })
+            }
+        }
 
         req.user = decode
 

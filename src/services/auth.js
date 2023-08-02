@@ -3,6 +3,7 @@ const hashPasword = require('../utils/hashPassword')
 const comparePassword = require('../utils/comparePassword')
 const createToken = require('../utils/createToken')
 const apiError = require('../services/apiError')
+const jwt = require('jsonwebtoken')
 
 class AuthServices {
     constructor() {
@@ -12,15 +13,21 @@ class AuthServices {
         return new Promise(async (resolve, reject) => {
             try {
                 const [user, created] = await db.User.findOrCreate({
-                    where: { email },   
+                    where: { email },
                     defaults: {
                         roleCode: roleCode || "R3",
                         name,
                         avatar: avatar || "src/assets/img/user-avatar.webp",
                         email,
-                        password: hashPasword(password)
+                        password: hashPasword(password),
                     }
                 });
+
+                const refreshToken = createToken({
+                    id: user.id,
+                    email: user.email,
+                    roleCode: user.roleCode
+                }, process.env.JWT_SECRET_KEY_REFRESH_TOKEN, process.env.EXPIRED_DURATION_REFRESH_TOKEN)
 
                 if (created) {
                     resolve({
@@ -28,13 +35,22 @@ class AuthServices {
                         status: "success",
                         message: "register successfully",
                         data: {
-                            authToken: "Bearer " + createToken({
+                            accessToken: createToken({
                                 id: user.id,
                                 email: user.email,
                                 roleCode: user.roleCode
-                            }, process.env.JWT_SECRET_TOKEN)
+                            }, process.env.JWT_SECRET_KEY_ACCESS_TOKEN, process.env.EXPIRED_DURATION_ACCESS_TOKEN),
+                            refreshToken
                         }
                     })
+
+                    refreshToken && (
+                        await db.User.update(
+                            { refreshToken },
+                            { where: { id: user.id } }
+                        )
+                    )
+
                 } else {
                     throw new apiError("your email is used by other account", 400, "RegisterException")
                 }
@@ -51,6 +67,12 @@ class AuthServices {
                     where: { email },
                 });
 
+                const refreshToken = createToken({
+                    id: user.id,
+                    email: user.email,
+                    roleCode: user.roleCode
+                }, process.env.JWT_SECRET_KEY_REFRESH_TOKEN, process.env.EXPIRED_DURATION_REFRESH_TOKEN)
+
                 if (user) {
                     if (comparePassword(password, user.password)) {
                         resolve({
@@ -58,19 +80,75 @@ class AuthServices {
                             status: "success",
                             message: "login successfully",
                             data: {
-                                authToken: "Bearer " + createToken({
+                                accessToken: createToken({
                                     id: user.id,
                                     email: user.email,
                                     roleCode: user.roleCode
-                                }, process.env.JWT_SECRET_TOKEN)
+                                }, process.env.JWT_SECRET_KEY_ACCESS_TOKEN, process.env.EXPIRED_DURATION_ACCESS_TOKEN),
+                                refreshToken
                             }
                         })
+
+                        refreshToken && (
+                            await db.User.update(
+                                { refreshToken },
+                                { where: { id: user.id } }
+                            )
+                        )
+
                     } else {
                         throw new apiError("email or password is incorrect", 400, "InvalidAuthentication")
                     }
                 } else {
                     throw new apiError("email or password is incorrect", 400, "InvalidAuthentication")
                 }
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    refreshAccessToken(refreshToken) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!refreshToken)
+                    throw new apiError('missing refresh token', 400, "AuthException")
+
+
+                jwt.verify(refreshToken, process.env.JWT_SECRET_KEY_REFRESH_TOKEN, async (err) => {
+                    try {
+                        if (err) {
+                            const expiredToken = err instanceof jwt.TokenExpiredError
+
+                            if (expiredToken) {
+                                throw new apiError("refresh token is expired. Please Login to get new ", 401, { expiredToken: true })
+                            } else {
+                                throw new apiError("refresh token is invalid", 401, { invalidToken: true })
+                            }
+                        }
+
+                        const user = await db.User.findOne({
+                            where: { refreshToken }
+                        })
+
+
+                        resolve({
+                            code: 200,
+                            status: "success",
+                            message: "refresh access token successfully",
+                            data: {
+                                accessToken: createToken({
+                                    id: user.id,
+                                    email: user.email,
+                                    roleCode: user.roleCode
+                                }, process.env.JWT_SECRET_KEY_ACCESS_TOKEN, process.env.EXPIRED_DURATION_ACCESS_TOKEN),
+                                refreshToken
+                            }
+                        })
+                    } catch (error) {
+                        reject(error)
+                    }
+                })
             } catch (error) {
                 reject(error)
             }

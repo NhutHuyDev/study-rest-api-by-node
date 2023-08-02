@@ -12,6 +12,11 @@ const login = asyncErrorHandler(async (req, res) => {
     return res.json(response)
 })
 
+const refreshAccessToken = asyncErrorHandler(async (req, res) => {    
+    const response = await authServices.refreshAccessToken(req.body.refreshToken)
+    return res.json(response)
+})
+
 module.exports = {
-    register, login
+    register, login, refreshAccessToken
 }
