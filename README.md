@@ -5,9 +5,12 @@ Học viết **REST Api** bằng Node
 Để tiếp tục, tối thiểu phải có môi trường để chạy Node
 
 ### Cài đặt
-> npm install
-
-> npm run dev
+```bash
+npm install
+```
+```bash
+npm run dev
+```
 
 ### Chức năng
 - Authentication: 
