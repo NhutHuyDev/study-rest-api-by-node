@@ -25,5 +25,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiO
 GET http://localhost:5000/api/v1/database/
 
 ###
-GET http://localhost:5000/api/v1/book/?available=1,2
+GET http://localhost:5000/api/v1/book/?available=1,10&page=2&title=of
 

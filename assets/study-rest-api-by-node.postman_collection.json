@@ -1,0 +1,357 @@
+{
+	"info": {
+		"_postman_id": "9754f9db-830d-4e9f-86fb-494b99f8d8f3",
+		"name": "study-rest-api-by-node",
+		"description": "### Feature\n\n- **Authentication**: login, register, verify token, refresh token, phân quyền (user, moderator, admin)\n- **User**: get current user\n- **Book**: create a book, get books, update book by id, delete book by id\n- **Upload images to cloundinary**\n    \n\n### Technology\n\n- Express - Nodejs\n- Sequelize ORM\n- MySQL\n- Cloudinary\n    \n\n### Referance\n\n- [https://s3.amazonaws.com/tfpearsonecollege/bestpractices/RESTful+Best+Practices.pdf]()\n- [https://www.youtube.com/watch?v=AhDSNPry8uw&amp;list=PLGcINiGdJE93CggoN9YBjSnDRV7Rbp3Qu]()",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28197704"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role_code\": \"R3\", \r\n    \"name\": \"Nguyễn Nhựt Huy\", \r\n    \"email\": \"nguyennhuthuy02@gmail.com\",\r\n    \"password\": \"nhuthuy2002\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/auth/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"nguyennhuthuy02@gmail.com\",\r\n    \"password\": \"nhuthuy2002\"\r\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh token",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJuZ3V5ZW5uaHV0aHV5MDJAZ21haWwuY29tIiwicm9sZUNvZGUiOiJSMyIsImlhdCI6MTY5MDk5ODM1MSwiZXhwIjoxNjkwOTk4NDExfQ.h40iL7AqqwmFA8QazUg_1G68uf0wXY57nMKyBP8TTEg\"\r\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/auth/refresh-token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "book",
+			"item": [
+				{
+					"name": "get books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/book/?available=1,10&orderBy=title desc&page=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"book",
+								""
+							],
+							"query": [
+								{
+									"key": "available",
+									"value": "1,10"
+								},
+								{
+									"key": "orderBy",
+									"value": "title desc"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a book",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJuZ3V5ZW5uaHV0aHV5KzI5OUBnbWFpbC5jb20iLCJyb2xlQ29kZSI6IlIyIiwiaWF0IjoxNjkwOTQ0MzM5LCJleHAiOjE2OTEzNzYzMzl9.i_rSaBfqb2BeG4-kqVJGZdE0Qmv1ZwBAcoFfaDnGEqk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "think and grow rich tập 2",
+									"type": "text"
+								},
+								{
+									"key": "categoryCode",
+									"value": "ih17",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "31.13",
+									"type": "text"
+								},
+								{
+									"key": "available",
+									"value": "15",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Nguyen Nhut Huy/Downloads/think-and-grow-rich.jpg"
+								},
+								{
+									"key": "description",
+									"value": "Think & Grow Rich - Nghĩ Giàu Và Làm Giàu là một trong những cuốn sách bán chạy nhất mọi thời đại. Đã hơn 60 triệu bản được phát hành với gần trăm ngôn ngữ trên toàn thế giới và được công nhận là cuốn sách tạo ra nhiều triệu phú hơn, một cuốn sách truyền cảm hứng thành công nhiều hơn bất cứ cuốn sách kinh doanh nào trong lịch sử.\n\nTác phẩm này đã giúp tác giả của nó, Napoleon Hill, được tôn vinh bằng danh hiệu “người tạo ra những nhà triệu phú”. Đây cũng là cuốn sách hiếm hoi được đứng trong top của rất nhiều bình chọn theo nhiều tiêu chí khác nhau - bình chọn của độc giả, của giới chuyên môn, của báo chí.",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/book/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"book",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update a book",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJuZ3V5ZW5uaHV0aHV5KzI5OUBnbWFpbC5jb20iLCJyb2xlQ29kZSI6IlIyIiwiaWF0IjoxNjkwOTQ0MzM5LCJleHAiOjE2OTEzNzYzMzl9.i_rSaBfqb2BeG4-kqVJGZdE0Qmv1ZwBAcoFfaDnGEqk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1528fb8e-0f21-427f-947a-5b07e0a27476",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "think and grow rich 17th edition",
+									"type": "text"
+								},
+								{
+									"key": "categoryCode",
+									"value": "ym7",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "33.33",
+									"type": "text"
+								},
+								{
+									"key": "available",
+									"value": "25",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Nguyen Nhut Huy/Downloads/think-and-grow-rich.jpg"
+								},
+								{
+									"key": "description",
+									"value": "Think & Grow Rich - Nghĩ Giàu Và Làm Giàu là một trong những cuốn sách bán chạy nhất mọi thời đại. Đã hơn 60 triệu bản được phát hành với gần trăm ngôn ngữ trên toàn thế giới và được công nhận là cuốn sách tạo ra nhiều triệu phú hơn, một cuốn sách truyền cảm hứng thành công nhiều hơn bất cứ cuốn sách kinh doanh nào trong lịch sử.\nTác phẩm này đã giúp tác giả của nó, Napoleon Hill, được tôn vinh bằng danh hiệu “người tạo ra những nhà triệu phú”. Đây cũng là cuốn sách hiếm hoi được đứng trong top của rất nhiều bình chọn theo nhiều tiêu chí khác nhau - bình chọn của độc giả, của giới chuyên môn, của báo chí.",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/book/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"book",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete books",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJuZ3V5ZW5uaHV0aHV5KzI5OUBnbWFpbC5jb20iLCJyb2xlQ29kZSI6IlIyIiwiaWF0IjoxNjkwOTQ0MzM5LCJleHAiOjE2OTEzNzYzMzl9.i_rSaBfqb2BeG4-kqVJGZdE0Qmv1ZwBAcoFfaDnGEqk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/book/?ids=213d219d-70d0-4f83-8f49-232950a12ec6,03a92cd3-3d46-438a-9ad6-17d58c56575a&images=study-rest-api-by-node/books/oupwrtth5yhbfrvsxjx5,study-rest-api-by-node/books/xuvpinyfdl9b96imimsy",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"book",
+								""
+							],
+							"query": [
+								{
+									"key": "ids",
+									"value": "213d219d-70d0-4f83-8f49-232950a12ec6,03a92cd3-3d46-438a-9ad6-17d58c56575a"
+								},
+								{
+									"key": "images",
+									"value": "study-rest-api-by-node/books/oupwrtth5yhbfrvsxjx5,study-rest-api-by-node/books/xuvpinyfdl9b96imimsy"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get current user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJuZ3V5ZW5uaHV0aHV5MDJAZ21haWwuY29tIiwicm9sZUNvZGUiOiJSMyIsImlhdCI6MTY5MDk5Nzc3NCwiZXhwIjoxNjkwOTk3ODA0fQ.020BcYy4H2zifNp0BclSREsFh4rvE1YcZ_yoORZSqOY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.request.headers.add({",
+					"    key: \"content-type\",",
+					"    value: \"application/json\"",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

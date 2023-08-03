@@ -17,7 +17,7 @@ class AuthServices {
                     defaults: {
                         roleCode: roleCode || "R3",
                         name,
-                        avatar: avatar || "src/assets/img/user-avatar.webp",
+                        avatar: avatar || "https://res.cloudinary.com/dvrknnoaf/image/upload/v1691033905/study-rest-api-by-node/users/user-avatar_ukcpom.webp",
                         email,
                         password: hashPasword(password),
                     }
